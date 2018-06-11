@@ -6,7 +6,7 @@ deps:
 test: deps
 	npm run test
 	
-build: test
+build: 
 	mkdir -p examples/browser/lib/
 	npm run build
 	cp dist/orbitdb.min.js examples/browser/lib/orbitdb.min.js

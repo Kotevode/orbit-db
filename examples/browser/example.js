@@ -1,5 +1,5 @@
 const creatures = [
-  '🐙', '🐷', '🐬', '🐞', 
+  '🐙', '🐷', '🐬', '🐞',
   '🐈', '🙉', '🐸', '🐓',
   '🐊', '🕷', '🐠', '🐘',
   '🐼', '🐰', '🐶', '🐥'
@@ -19,7 +19,7 @@ const readonlyCheckbox = document.getElementById("readonly")
 
 function handleError(e) {
   console.error(e.stack)
-  statusElm.innerHTML = e.message  
+  statusElm.innerHTML = e.message
 }
 
 const main = (IPFS, ORBITDB) => {
@@ -46,22 +46,20 @@ const main = (IPFS, ORBITDB) => {
 
   // Create IPFS instance
   const ipfs = new Ipfs({
-    repo: '/orbitdb/examples/browser/new/ipfs/0.27.3',
+    repo: '/ipfs/shared/',
     start: true,
     EXPERIMENTAL: {
       pubsub: true,
     },
     config: {
-      Addresses: {
-        Swarm: [
-          // Use IPFS dev signal server
-          // '/dns4/star-signal.cloud.ipfs.team/wss/p2p-webrtc-star',
-          '/dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star',
-          // Use local signal server
-          // '/ip4/0.0.0.0/tcp/9090/wss/p2p-webrtc-star',
-        ]
-      },
+    Addresses: {
+      Swarm: [
+        // '/ip4/127.0.0.1/tcp/9090/wss/p2p-webrtc-star',
+        '/ip4/54.237.216.212/tcp/9090/ws/p2p-webrtc-star'
+        // '/dns4/wrtc-star.discovery.libp2p.io/tcp/443/wss/p2p-webrtc-star',
+      ]
     }
+  }
   })
 
   ipfs.on('error', (e) => handleError(e))
@@ -150,9 +148,9 @@ const main = (IPFS, ORBITDB) => {
 
       db = await orbitdb.open(name, {
         // If database doesn't exist, create it
-        create: true, 
+        create: true,
         overwrite: true,
-        // Load only the local version of the database, 
+        // Load only the local version of the database,
         // don't load the latest from the network yet
         localOnly: false,
         type: type,
@@ -172,6 +170,7 @@ const main = (IPFS, ORBITDB) => {
 
   const openDatabase = async () => {
     const address = dbAddressField.value
+    debugger
 
     await resetDatabase(db)
 
@@ -255,7 +254,6 @@ const main = (IPFS, ORBITDB) => {
     outputElm.innerHTML = `
       <div><b>Peer ID:</b> ${orbitdb.id}</div>
       <div><b>Peers (database/network):</b> ${databasePeers.length} / ${networkPeers.length}</div>
-      <div><b>Oplog Size:</b> ${db._replicationInfo.progress} / ${db._replicationInfo.max}</div>
       <h2>Results</h2>
       <div id="results">
         <div>
